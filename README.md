@@ -161,3 +161,278 @@ greet("Alice")  # Output: Hello, Alice!
 * **Organization:** Break down complex analysis into logical steps, making the code easier to understand and debug.
 * **Abstraction:** Hide the underlying implementation details, allowing you to focus on the higher-level analysis.
 * **Automation:** Automate data processing and analysis pipelines by defining functions for each step.
+
+**11. What is the purpose of the `lambda` function in Python? When might you use it?**
+
+**Answer:** A `lambda` function is a small, anonymous function in Python. It can have any number of arguments but can only have one expression. The syntax for a lambda function is: `lambda arguments: expression`.
+
+**When to use it:**
+
+Lambda functions are often used when you need a simple function for a short period, especially as an argument to higher-order functions like `map()`, `filter()`, and `sorted()`. They can make your code more concise in such situations.
+
+**Example:**
+
+```python
+numbers = [1, 2, 3, 4, 5]
+squared_numbers = list(map(lambda x: x**2, numbers))
+print(squared_numbers)  # Output: [1, 4, 9, 16, 25]
+
+even_numbers = list(filter(lambda x: x % 2 == 0, numbers))
+print(even_numbers)  # Output: [2, 4]
+```
+
+**12. Explain the concept of a Python generator. How does it differ from a regular function that returns a list?**
+
+**Answer:** A Python generator is a function that returns an iterator. Instead of returning all the values at once like a regular function that returns a list, a generator yields values one at a time using the `yield` keyword.
+
+**Differences:**
+
+* **Memory efficiency:** Generators produce items on demand, so they don't store the entire sequence in memory. This is especially beneficial when dealing with large datasets. Regular functions that return lists create the entire list in memory.
+* **Lazy evaluation:** Values are generated only when they are needed (when iterated over). This can lead to performance improvements if not all the generated values are used.
+* **Implementation:** Regular functions use the `return` statement to send back a value and then terminate. Generators use the `yield` statement, which pauses the function's execution and returns a value. The function's state is saved, allowing it to resume from where it left off when the next value is requested.
+
+**Example:**
+
+```python
+def count_up_to(n):
+  i = 1
+  while i <= n:
+    yield i
+    i += 1
+
+counter = count_up_to(5)
+print(next(counter))  # Output: 1
+print(next(counter))  # Output: 2
+for num in counter:
+  print(num)          # Output: 3, 4, 5
+```
+
+**13. What are Python decorators? How can they be useful in a data analysis context?**
+
+**Answer:** Python decorators are a way to add functionality to an existing function without modifying its structure. They are essentially syntactic sugar that makes it easy to wrap functions. A decorator is a function that takes another function as input, adds some behavior to it, and returns the modified function.
+
+**Usefulness in data analysis:**
+
+* **Timing function execution:** You can create a decorator to measure how long a data processing function takes to run.
+* **Logging function calls:** Decorators can be used to log when a function is called, with what arguments, and what its return value is.
+* **Input validation:** You can implement decorators to check if the input arguments to a data analysis function meet certain criteria.
+* **Memoization:** Decorators can be used to cache the results of expensive function calls based on their inputs, improving performance for repeated calls with the same arguments.
+
+**Example (timing function execution):**
+
+```python
+import time
+
+def timer(func):
+  def wrapper(*args, **kwargs):
+    start_time = time.time()
+    result = func(*args, **kwargs)
+    end_time = time.time()
+    print(f"{func.__name__} took {end_time - start_time:.4f} seconds to execute.")
+    return result
+  return wrapper
+
+@timer
+def process_data(data):
+  # Simulate some data processing
+  time.sleep(2)
+  return len(data)
+
+data = list(range(100000))
+result = process_data(data)
+print(f"Processed {result} items.")
+```
+
+**14. Explain the concept of object-oriented programming (OOP) in Python. How might it be relevant to a data analysis project?**
+
+**Answer:** Object-Oriented Programming (OOP) is a programming paradigm based on the concept of "objects," which can contain data, in the form of fields (often known as attributes or properties), and code, in the form of procedures (often known as methods). The key principles of OOP include:
+
+* **Encapsulation:** Bundling data and the methods that operate on that data within a single unit (an object).
+* **Inheritance:** Creating new classes (derived or child classes) based on existing classes (base or parent classes), inheriting their attributes and methods.
+* **Polymorphism:** The ability of objects of different classes to respond to the same method call in their own way.
+
+**Relevance to data analysis:**
+
+* **Creating custom data structures:** You can define classes to represent specific types of data or analytical models, making your code more organized and easier to work with. For example, a class to represent a customer with attributes like ID, purchase history, and methods to calculate their average spending.
+* **Building reusable components:** OOP promotes code reusability through inheritance and encapsulation. You can create base classes with common functionalities and then derive specialized classes for different analysis tasks.
+* **Modeling real-world entities:** OOP allows you to model real-world entities and their relationships more naturally, which can be helpful in business analysis scenarios.
+* **Improving code maintainability:** By organizing code into objects with well-defined responsibilities, OOP can make larger data analysis projects easier to manage and maintain.
+
+**15. What are some common data cleaning tasks you might perform using Python and the `pandas` library?**
+
+**Answer:** Common data cleaning tasks using Python and `pandas` include:
+
+* **Handling missing values:** Identifying, removing, or imputing `NaN` values.
+* **Removing duplicates:** Identifying and removing duplicate rows based on all or specific columns.
+* **Data type conversion:** Ensuring columns have the correct data types (e.g., converting strings to numeric, dates to datetime objects).
+* **String manipulation:** Cleaning and transforming text data (e.g., removing extra spaces, converting to lowercase, extracting substrings).
+* **Filtering and selecting data:** Removing irrelevant rows or columns based on certain conditions.
+* **Handling outliers:** Identifying and potentially removing or transforming extreme values.
+* **Data validation:** Checking for inconsistencies or errors in the data (e.g., values outside a valid range).
+* **Reshaping data:** Transforming the structure of the DataFrame (e.g., pivoting, melting).
+
+**16. How would you read a CSV file into a `pandas` DataFrame? What are some important parameters you might need to consider?**
+
+**Answer:** You can read a CSV file into a `pandas` DataFrame using the `pd.read_csv()` function.
+
+**Important parameters to consider:**
+
+* **`filepath_or_buffer`:** The path to the CSV file.
+* **`sep` (or `delimiter`):** The separator used in the file (default is `,`).
+* **`header`:** The row number(s) to use as the column names (default is 0, the first row). Set to `None` if the file has no header row.
+* **`names`:** A list of column names to use if the file doesn't have a header or you want to override it.
+* **`index_col`:** The column(s) to use as the row index.
+* **`dtype`:** A dictionary specifying the data type for each column.
+* **`parse_dates`:** A list of columns to parse as dates.
+* **`na_values`:** A list or dictionary of strings to recognize as `NaN`.
+* **`encoding`:** The encoding to use for reading the file (e.g., 'utf-8', 'latin-1').
+* **`skiprows`:** Number of rows to skip at the beginning of the file.
+* **`nrows`:** Number of rows to read from the file.
+
+**Example:**
+
+```python
+import pandas as pd
+
+# Reading a CSV file with default parameters
+df = pd.read_csv('data.csv')
+
+# Reading a CSV file with a different delimiter and specifying the header
+df_semicolon = pd.read_csv('data.csv', sep=';', header=0)
+
+# Reading a CSV file without a header and providing column names
+df_no_header = pd.read_csv('data.csv', header=None, names=['col1', 'col2', 'col3'])
+
+# Reading a CSV file and setting the first column as the index
+df_with_index = pd.read_csv('data.csv', index_col=0)
+```
+
+**17. What are some common statistical operations you can perform on a `pandas` Series or DataFrame?**
+
+**Answer:** `pandas` provides a wide range of methods for performing statistical operations:
+
+* **Descriptive statistics:**
+    * `count()`: Number of non-missing values.
+    * `mean()`: Average value.
+    * `median()`: Middle value.
+    * `mode()`: Most frequent value(s).
+    * `min()`: Minimum value.
+    * `max()`: Maximum value.
+    * `std()`: Standard deviation.
+    * `var()`: Variance.
+    * `quantile(q)`: Value at a given percentile `q`.
+    * `describe()`: Generates descriptive statistics of the DataFrame or Series.
+* **Aggregation:**
+    * `sum()`: Sum of values.
+    * `prod()`: Product of values.
+    * `cumsum()`: Cumulative sum.
+    * `cumprod()`: Cumulative product.
+* **Correlation and covariance:**
+    * `corr()`: Correlation between columns (for DataFrames) or between Series.
+    * `cov()`: Covariance between columns (for DataFrames) or between Series.
+* **Grouped statistics (using `groupby()`):** Applying any of the above functions to groups of data.
+
+**18. How can you create different types of plots using `matplotlib`? Give examples of when you might use each type in a business or data analysis context.**
+
+**Answer:** `matplotlib` offers various plot types through its `pyplot` module. Here are some common ones:
+
+* **Line plot (`plt.plot()`):** Used to show trends over time or relationships between continuous variables.
+    * **Business context:** Tracking sales trends over quarters, website traffic over months, stock prices.
+    * **Data analysis context:** Visualizing time series data, showing the relationship between two numerical variables.
+* **Scatter plot (`plt.scatter()`):** Used to visualize the relationship between two numerical variables and identify correlations or clusters.
+    * **Business context:** Analyzing the relationship between advertising spend and sales, customer age and spending.
+    * **Data analysis context:** Identifying outliers, exploring correlations between features in a dataset.
+* **Bar chart (`plt.bar()` or `plt.barh()`):** Used to compare categorical data or discrete numerical data.
+    * **Business context:** Comparing sales by product category, website traffic by source, survey responses.
+    * **Data analysis context:** Visualizing the frequency of different categories, comparing the means of different groups.
+* **Histogram (`plt.hist()`):** Used to visualize the distribution of a single numerical variable.
+    * **Business context:** Understanding the distribution of customer ages, order values.
+    * **Data analysis context:** Assessing the normality of a distribution, identifying skewness.
+* **Pie chart (`plt.pie()`):** Used to show the proportion of different categories in a whole.
+    * **Business context:** Showing market share of different products, distribution of expenses.
+    * **Data analysis context:** Visualizing the relative frequency of different categories.
+* **Box plot (`plt.boxplot()`):** Used to display the distribution of a numerical variable and identify potential outliers.
+    * **Business context:** Comparing the distribution of sales across different regions, customer satisfaction scores for different product versions.
+    * **Data analysis context:** Identifying the median, quartiles, and outliers in a dataset.
+
+**19. What is the purpose of SQL in the context of data analysis? How might you interact with a SQL database using Python?**
+
+**Answer:** SQL (Structured Query Language) is the standard language for managing and manipulating data in relational database management systems (RDBMS). In data analysis, SQL is crucial for:
+
+* **Data retrieval:** Querying and extracting specific data from databases based on defined criteria.
+* **Data manipulation:** Filtering, sorting, joining, and aggregating data within the database.
+* **Data transformation:** Creating new tables or views based on existing data.
+
+**Interacting with a SQL database using Python:**
+
+Python provides various libraries to connect to and interact with SQL databases. Some popular ones include:
+
+* **`sqlite3`:** For working with SQLite databases (often built-in).
+* **`psycopg2`:** For PostgreSQL databases.
+* **`mysql.connector`:** For MySQL databases.
+* **`pyodbc`:** For connecting to various databases using ODBC.
+
+The general workflow involves:
+
+1. **Establishing a connection:** Using the appropriate library to connect to the database, providing credentials if necessary.
+2. **Creating a cursor object:** A cursor allows you to execute SQL queries.
+3. **Executing SQL queries:** Using the cursor's `execute()` method to run SQL statements.
+4. **Fetching results:** Using methods like `fetchone()`, `fetchall()`, or `fetchmany()` to retrieve the data returned by a query.
+5. **Closing the cursor and connection:** Releasing the resources.
+
+**Example (using `sqlite3`):**
+
+```python
+import sqlite3
+import pandas as pd
+
+# Connect to the SQLite database (or create it if it doesn't exist)
+conn = sqlite3.connect('mydatabase.db')
+cursor = conn.cursor()
+
+# Execute a SQL query
+cursor.execute("SELECT * FROM customers WHERE city = 'Delhi'")
+
+# Fetch all the results
+results = cursor.fetchall()
+
+# Load the results into a pandas DataFrame
+df = pd.DataFrame(results, columns=['id', 'name', 'city'])
+print(df)
+
+# Close the cursor and connection
+cursor.close()
+conn.close()
+```
+
+**20. Imagine you have two lists of customer IDs: one list of customers who made a purchase in the last month and another list of customers who visited your website in the last month. How would you find the list of customers who both made a purchase and visited the website using Python?**
+
+**Answer:** You can achieve this using set operations in Python, which are efficient for finding common elements between collections.
+
+```python
+purchased_last_month = [101, 105, 108, 112, 115]
+visited_last_month = [103, 105, 109, 112, 118]
+
+# Convert the lists to sets
+purchased_set = set(purchased_last_month)
+visited_set = set(visited_last_month)
+
+# Find the intersection of the two sets (customers present in both)
+common_customers = purchased_set.intersection(visited_set)
+
+# Convert the result back to a list if needed
+common_customers_list = list(common_customers)
+
+print(f"Customers who purchased: {purchased_last_month}")
+print(f"Customers who visited: {visited_last_month}")
+print(f"Customers who both purchased and visited: {common_customers_list}")
+# Output: Customers who both purchased and visited: [105, 112]
+```
+
+Alternatively, you could achieve this using list comprehensions, but set operations are generally more efficient for this kind of task, especially with larger lists.
+
+```python
+common_customers_list_comp = [customer for customer in purchased_last_month if customer in visited_last_month]
+print(f"Customers who both purchased and visited (using list comprehension): {common_customers_list_comp}")
+```
+
